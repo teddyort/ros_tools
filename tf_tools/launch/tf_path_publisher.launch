@@ -1,0 +1,11 @@
+<launch>
+    <arg name="parent_frame" default="map" />
+    <arg name="child_frame" default="base_link" />
+    <arg name="rate" default="100" />
+
+    <node name="tf_path_publisher" pkg="tf_tools" type="tf_path_publisher.py" >
+        <param name="parent_frame" value="$(arg parent_frame)" />
+        <param name="child_frame" value="$(arg child_frame)" />
+        <param name="rate" value="$(arg rate)" />
+    </node>
+</launch>
