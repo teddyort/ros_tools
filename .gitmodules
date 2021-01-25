@@ -1,0 +1,3 @@
+[submodule "third_party/tf_bag"]
+	path = third_party/tf_bag
+	url = git@github.com:IFL-CAMP/tf_bag.git
