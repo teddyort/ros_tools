@@ -2,6 +2,7 @@
 import rospy
 from nav_msgs.msg import Path
 from geometry_msgs.msg import PoseStamped
+import conversions.pose_converter as pc
 
 import tf2_ros
 
@@ -49,13 +50,7 @@ class TfPathPublisherNode(object):
             return
 
         # Convert transform to pose
-        msg = PoseStamped()
-        msg.header = ts.header
-        trans, rot = ts.transform.translation, ts.transform.rotation
-        p, o = msg.pose.position, msg.pose.orientation
-        p.x, p.y, p.z = trans.x, trans.y, trans.z
-        o.x, o.y, o.z, o.w = rot.x, rot.y, rot.z, rot.w
-        self.path.poses.append(msg)
+        self.path.poses.append(pc.to_pose_stamped(ts))
         self.path.header.stamp = rospy.Time.now()
         self.pub.publish(self.path)
 
