@@ -5,11 +5,11 @@ from geometry_msgs.msg import PoseStamped
 
 import tf2_ros
 
-class TfPathPublisher(object):
-    """TfPathPublisher
+class TfPathPublisherNode(object):
+    """TfPathPublisherNode
     Author: Teddy Ort
-    Inputs:
-    Outputs:
+    Inputs (tf):  Periodically queries the tf tree to track the desired transform
+    Outputs (nav_msgs.msg.Path): Publishes a path containing the poses of the transforms
     """
 
     def __init__(self):
@@ -21,7 +21,7 @@ class TfPathPublisher(object):
         self.child_frame = rospy.get_param("~child_frame", 'base_link')
         self.rate = rospy.get_param("~rate", 100)
 
-        self.pub = rospy.Publisher("~/path", Path, queue_size=1)
+        self.pub = rospy.Publisher("~path", Path, queue_size=1)
 
         # Init vars
         self.path = Path()
@@ -64,6 +64,6 @@ class TfPathPublisher(object):
 
 
 if __name__ == '__main__':
-    rospy.init_node('tf_path_publisher', anonymous=False)
-    tf_path_publisher = TfPathPublisher()
+    rospy.init_node('tf_path_publisher_node', anonymous=False)
+    tf_path_publisher_node = TfPathPublisherNode()
     rospy.spin()
