@@ -1,0 +1,4 @@
+<launch>
+    <test test-name="py_occupancy_grid_tester" pkg="conversions"
+          type="py_occupancy_grid_tester.py"/>
+</launch>
