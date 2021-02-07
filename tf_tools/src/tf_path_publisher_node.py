@@ -34,7 +34,7 @@ class TfPathPublisherNode(object):
 
         self.loginfo("has started")
 
-        rate = rospy.Rate(self.rate)
+        rate = rospy.Rate(self.rate, reset=True)
         while not rospy.is_shutdown():
             rate.sleep()
             self.update_path()
@@ -49,7 +49,11 @@ class TfPathPublisherNode(object):
             rospy.logwarn_throttle(5, err)
             return
 
-        # Convert transform to pose
+        # Check if time moved backward, and if so, reset the path
+        if self.path.poses and self.path.poses[-1].header.stamp > ts.header.stamp:
+            self.path.poses = []
+
+        # Add the new pose and publish
         self.path.poses.append(pc.to_pose_stamped(ts))
         self.path.header.stamp = rospy.Time.now()
         self.pub.publish(self.path)
