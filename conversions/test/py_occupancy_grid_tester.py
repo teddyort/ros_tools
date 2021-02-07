@@ -6,6 +6,8 @@ from nav_msgs.msg import OccupancyGrid
 from conversions import PyOccupancyGrid
 
 class PyOccupancyGridTester(unittest.TestCase):
+    longMessage = True # Gives more descriptive failure messages
+
     def setUp(self):
         """ Setup some sample data for the tests. """
         # The sample grid will be a 10x10 square with each cell having a width of 10m. We will
@@ -46,6 +48,20 @@ class PyOccupancyGridTester(unittest.TestCase):
         xy = np.random.rand(N, 2) * 100 -50
         occupied = self.pygrid.is_occupied(xy)
         np.testing.assert_allclose(occupied, xy[:,0] >= 0 )
+
+    def test_max_cost(self):
+        """ Test that setting a max_cost can change the behavior of is_occupied"""
+
+        # Add a higher cost to the far right column
+        self.pygrid.grid[:,-1] = 2
+
+        # [25,0] is in the right half, but if we allow max_cost=1 it shouldn't be occupied
+        self.assertFalse(self.pygrid.is_occupied([25, 0], max_cost=1),
+                         "[25,0] is not occupied since we set a max_cost=1")
+
+        # But [50,0] is in the last column so it should still fail
+        self.assertTrue(self.pygrid.is_occupied([50, 0], max_cost=1),
+                        "The last column is occupied with a cost of 2 above the max_cost of 1")
 
     def test_roundtrip(self):
         """ Test converting from a ROS message and back again """

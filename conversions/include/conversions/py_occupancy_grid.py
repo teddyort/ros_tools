@@ -51,13 +51,14 @@ class PyOccupancyGrid(object):
         rc = np.flip(((xy - self.origin) // self.resolution).astype(int), -1)
         return rc.clip((0, 0), self.shape - 1) # Clip to array size
 
-    def is_occupied(self, xy):
-        """ Returns a boolean of the same shape as xy True where the corresponding cell > 0.
+    def is_occupied(self, xy, max_cost=0):
+        """ Returns a boolean of the same shape as xy True where the corresponding cell > max_cost.
         Args:
             xy: Either a single coordinate [x,y] or array with shape (N,2)
+            max_cost (float): The maximum cost to consider a cell unoccupied. default: 0
         """
         rc = self.coord_to_index(xy)
-        return self.grid[rc.T[0], rc.T[1]] > 0
+        return self.grid[rc.T[0], rc.T[1]] > max_cost
 
     def to_msg(self):
         """ Returns the grid as a ros nav_msgs.msg.OccupancyGrid. """
