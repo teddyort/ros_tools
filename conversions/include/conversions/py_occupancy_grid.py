@@ -74,7 +74,7 @@ class PyOccupancyGrid(object):
         top_right = self.resolution*(np.flipud(self.shape)) + self.origin
         return self.origin[0], top_right[0], self.origin[1], top_right[1]
 
-    def plot(self, ax=None, **kwargs):
+    def plot(self, ax=None):
         """ Plots the grid as an image and returns a handle to the image axes
         Args:
             ax (matplotlib.axes): An optional axes handle. If present it will be modified
