@@ -82,8 +82,8 @@ class PyOccupancyGrid(object):
         """
 
         im2 = np.zeros(self.grid.shape + (4,))
-        im2[:, :, 3] = np.flipud(self.grid)
+        im2[:, :, 3] = self.grid
 
         ax = ax if ax else plt.axes()
-        ax.imshow(im2, extent=np.array(self.get_extent())-self.resolution/2)
+        ax.imshow(im2, extent=np.array(self.get_extent())-self.resolution/2, origin='lower')
         return ax
