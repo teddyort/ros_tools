@@ -77,13 +77,10 @@ class PyOccupancyGrid(object):
     def plot(self, ax=None, *args, **kwargs):
         """ Plots the grid as an image and returns a handle to the image axes
         Args:
-            ax (matplotlib.axes): An optional axes handle. If present it will be modified
-                                  and returned. Otherwise a new axes object will be created.
+            ax (matplotlib.axes): An optional axes handle. If present it will be modified and returned.
+                                  Otherwise a new axes object will be created. default: None
         """
 
-        im2 = np.zeros(self.grid.shape + (4,))
-        im2[:, :, 3] = self.grid
-
         ax = ax if ax else plt.axes()
-        ax.imshow(im2, extent=np.array(self.get_extent())-self.resolution/2, origin='lower')
+        ax.imshow(self.grid, extent=self.get_extent())
         return ax
