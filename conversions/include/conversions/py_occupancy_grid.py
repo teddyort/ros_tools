@@ -76,4 +76,4 @@ class PyOccupancyGrid(object):
 
     def plot(self):
         """ Plots the grid as an image and returns a handle to the image axes """
-        return plt.imshow(self.grid, extent=self.get_extent())
+        return plt.imshow(self.grid, extent=self.get_extent(), origin='lower')
