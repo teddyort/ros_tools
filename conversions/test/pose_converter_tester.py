@@ -67,6 +67,14 @@ class PoseConverterTester(unittest.TestCase):
         tup2d = self.position[0:2] + (self.orientation2d,)
         self.assertEqual(tup2d, pc.to_tuple2d(tup2d))
 
+    def test_array_roundtrip(self):
+        arr = np.concatenate((self.position, self.orientation))
+        np.testing.assert_array_equal(arr, pc.to_array(arr))
+
+    def test_array2d_roundtrip(self):
+        arr = np.r_[self.position[0:2], self.orientation2d]
+        np.testing.assert_array_equal(arr, pc.to_array2d(arr))
+
 
 if __name__ == '__main__':
     rosunit.unitrun('rosutils', 'pose_converter_tester', PoseConverterTester)

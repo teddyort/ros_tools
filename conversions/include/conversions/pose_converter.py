@@ -4,11 +4,12 @@
 # Author: Teddy Ort
 
 import pprint
-
+import numpy as np
 import rospy
 from geometry_msgs.msg import Pose, PoseStamped, Transform, TransformStamped
 from std_msgs.msg import Header
 import tf.transformations as tr
+
 
 class Converter(object):
     def __init__(self, obj=None):
@@ -29,8 +30,12 @@ class Converter(object):
             self._from_transform_stamped(obj)
         elif len(obj) == 2:
             self._from_tuple(obj)
-        elif len(obj) == 3:
+        elif len(obj) == 3 and isinstance(obj, tuple):
             self._from_tuple2d(obj)
+        elif len(obj) == 3:
+            self._from_array2d(obj)
+        elif len(obj) == 7:
+            self._from_array(obj)
         else:
             raise TypeError('Unrecognized object type passed to constructor')
 
@@ -66,6 +71,13 @@ class Converter(object):
     def _from_tuple2d(self, tup):
         self.position = tup[0:2] + (0.0,)
         self.orientation = tr.quaternion_from_euler(0, 0, tup[2])
+
+    def _from_array(self, arr):
+        self.position = tuple(arr[:3])
+        self.orientation = tuple(arr[3:])
+
+    def _from_array2d(self, arr):
+        self._from_tuple2d(tuple(arr))
 
     def _to_header(self):
         header = Header()
@@ -106,6 +118,12 @@ class Converter(object):
     def to_tuple2d(self):
         return self.position[0:2] + (tr.euler_from_quaternion(self.orientation)[2],)
 
+    def to_array(self):
+        return np.concatenate(self.to_tuple())
+
+    def to_array2d(self):
+        return np.array(self.to_tuple2d())
+
     def __repr__(self):
         return ' ' + pprint.pformat(self.__dict__)[1:-1]
 
@@ -131,3 +149,9 @@ def to_tuple(obj):
 
 def to_tuple2d(obj):
     return Converter(obj).to_tuple2d()
+
+def to_array(obj):
+    return Converter(obj).to_array()
+
+def to_array2d(obj):
+    return Converter(obj).to_array2d()
