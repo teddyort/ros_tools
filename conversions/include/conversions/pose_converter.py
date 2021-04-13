@@ -8,7 +8,7 @@ import pprint
 import rospy
 from geometry_msgs.msg import Pose, PoseStamped, Transform, TransformStamped
 from std_msgs.msg import Header
-
+import tf.transformations as tr
 
 class Converter(object):
     def __init__(self, obj=None):
@@ -29,6 +29,8 @@ class Converter(object):
             self._from_transform_stamped(obj)
         elif len(obj) == 2:
             self._from_tuple(obj)
+        elif len(obj) == 3:
+            self._from_tuple2d(obj)
         else:
             raise TypeError('Unrecognized object type passed to constructor')
 
@@ -60,6 +62,10 @@ class Converter(object):
         assert len(tup[1]) == 4
         self.position = tuple(tup[0])
         self.orientation = tuple(tup[1])
+
+    def _from_tuple2d(self, tup):
+        self.position = tup[0:2] + (0.0,)
+        self.orientation = tr.quaternion_from_euler(0, 0, tup[2])
 
     def _to_header(self):
         header = Header()
@@ -97,6 +103,9 @@ class Converter(object):
     def to_tuple(self):
         return self.position, self.orientation
 
+    def to_tuple2d(self):
+        return self.position[0:2] + (tr.euler_from_quaternion(self.orientation)[2],)
+
     def __repr__(self):
         return ' ' + pprint.pformat(self.__dict__)[1:-1]
 
@@ -119,3 +128,6 @@ def to_transform_stamped(obj):
 
 def to_tuple(obj):
     return Converter(obj).to_tuple()
+
+def to_tuple2d(obj):
+    return Converter(obj).to_tuple2d()
