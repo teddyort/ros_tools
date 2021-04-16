@@ -18,12 +18,12 @@ def processMaxSpeed(msg):
     max_speed_ = msg.data
 
 def conversion():
-    rospy.init_node('twist_output_node', anonymous=True)
+    rospy.init_node('speedCurve_to_twist_node', anonymous=False)
 
-    twist_pub_ = rospy.Publisher('twist_output', Twist, queue_size=10)
+    twist_pub_ = rospy.Publisher('~cmd_vel', Twist, queue_size=10)
     
-    rospy.Subscriber("pure_pursiut_curvature", Float32, processCurvature)
-    rospy.Subscriber("max_speed", Float32, processMaxSpeed)
+    rospy.Subscriber("~curvature", Float32, processCurvature)
+    rospy.Subscriber("~max_speed", Float32, processMaxSpeed)
 
     rate = rospy.Rate(10)
 
