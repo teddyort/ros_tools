@@ -1,0 +1,6 @@
+<launch>
+	<remap from="speedCurve_to_twist_node/curvature" to="curvature" />
+	<remap from="speedCurve_to_twist_node/max_speed" to="max_speed" />
+  <node name="speedCurve_to_twist_node" pkg="conversions" type="speedCurvature_twist_generator.py" >
+  </node>
+</launch>
