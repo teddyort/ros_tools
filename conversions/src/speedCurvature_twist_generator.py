@@ -4,9 +4,9 @@
 
 import rospy
 from geometry_msgs.msg import Twist
-from std_msgs.msg import Float32
+from std_msgs.msg import Float64
 
-max_speed_ = 0
+max_speed_ = 2
 curvature_ = 0
 
 def processCurvature(msg):
@@ -22,8 +22,8 @@ def conversion():
 
     twist_pub_ = rospy.Publisher('~cmd_vel', Twist, queue_size=10)
     
-    rospy.Subscriber("~curvature", Float32, processCurvature)
-    rospy.Subscriber("~max_speed", Float32, processMaxSpeed)
+    rospy.Subscriber("~curvature", Float64, processCurvature)
+    rospy.Subscriber("~max_speed", Float64, processMaxSpeed)
 
     rate = rospy.Rate(10)
 
