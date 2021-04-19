@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import rosunit
 import unittest
+import numpy as np
 
 import conversions.pose_converter as pc
 from geometry_msgs.msg import Pose, PoseStamped, Transform, TransformStamped
@@ -10,6 +11,7 @@ class PoseConverterTester(unittest.TestCase):
         # Define some default values for testing
         self.position = (1, 1, 1)
         self.orientation = (0, 0, 1, 0)
+        self.orientation2d = np.pi
         self.parent = 'map'
         self.child = 'base_link'
 
@@ -56,6 +58,22 @@ class PoseConverterTester(unittest.TestCase):
 
         # Now convert back to pose and compare
         self.assertEqual(pose, pc.to_pose(tf))
+
+    def test_tuple_roundtrip(self):
+        tup = (self.position, self.orientation)
+        self.assertEqual(tup, pc.to_tuple(tup))
+
+    def test_tuple2d_roundtrip(self):
+        tup2d = self.position[0:2] + (self.orientation2d,)
+        self.assertEqual(tup2d, pc.to_tuple2d(tup2d))
+
+    def test_array_roundtrip(self):
+        arr = np.concatenate((self.position, self.orientation))
+        np.testing.assert_array_equal(arr, pc.to_array(arr))
+
+    def test_array2d_roundtrip(self):
+        arr = np.r_[self.position[0:2], self.orientation2d]
+        np.testing.assert_array_equal(arr, pc.to_array2d(arr))
 
 
 if __name__ == '__main__':
