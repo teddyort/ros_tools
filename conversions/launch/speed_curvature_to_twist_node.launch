@@ -1,0 +1,15 @@
+<launch>
+    <arg name="pkg_name" value="conversions"/>
+    <arg name="node_name" default="speed_curvature_to_twist_node"/>
+    <arg name="node_type" default="speed_curvature_to_twist_node.py"/>
+
+    <arg name="output" default="screen" doc="output display"/>
+    <arg name="req" default="true"/>
+
+    <node name="$(arg node_name)"
+          pkg="$(arg pkg_name)"
+          type="$(arg node_type)"
+          output="$(arg output)"
+          required="$(arg req)">
+    </node>
+</launch>
