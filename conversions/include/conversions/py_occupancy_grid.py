@@ -54,11 +54,18 @@ class PyOccupancyGrid(object):
     def is_occupied(self, xy, max_cost=0):
         """ Returns a boolean of the same shape as xy True where the corresponding cell > max_cost.
         Args:
-            xy: Either a single coordinate [x,y] or array with shape (N,2)
+            xy (arraylike): Either a single coordinate [x,y] or array with shape (N,2)
             max_cost (float): The maximum cost to consider a cell unoccupied. default: 0
         """
+        return self.get_coord_value(xy) > max_cost
+
+    def get_coord_value(self, xy):
+        """ Return the value of the py_occupancy grid at the given coordinates.
+        Args:
+            xy (arraylike): Either a single coordinate [x,y] or array with shape (N,2)
+        """
         rc = self.coord_to_index(xy)
-        return self.grid[rc.T[0], rc.T[1]] > max_cost
+        return self.grid[rc.T[0], rc.T[1]]
 
     def to_msg(self):
         """ Returns the grid as a ros nav_msgs.msg.OccupancyGrid. """
