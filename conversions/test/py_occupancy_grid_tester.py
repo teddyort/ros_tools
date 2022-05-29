@@ -40,6 +40,17 @@ class PyOccupancyGridTester(unittest.TestCase):
         # We know the top right cell is occupied because the right half is all 1's
         self.assertTrue(self.pygrid.is_occupied([50,50]))
 
+    def test_get_coord_value(self):
+        """ Test getting the value at a particular coordinate"""
+        # We know the right half is all 1's
+        self.assertEqual(self.pygrid.get_coord_value([50,30]), 1)
+
+    def test_get_coord_value_vectorized(self):
+        """ Test getting the value at a set of coordinates"""
+        # We know the right half is all 1's and the left all 0's
+        pts = [(-10, 30), (50, 30)]
+        np.testing.assert_array_equal(self.pygrid.get_coord_value(pts), [0, 1])
+
     def test_is_occupied_vectorized(self):
         """ Lookup a large set of points at once """
         # Choose random points in the area covered by the grid
